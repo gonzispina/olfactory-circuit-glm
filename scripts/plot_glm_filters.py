@@ -55,7 +55,10 @@ def plot_neuron52_event_filters(events) -> None:
     weights, alpha = fit_raw_coefficients(data, data.X_stimulus)
     filters = weights.reshape(len(STIMULUS_NAMES), N_STIM_LAGS)
     time = np.arange(N_STIM_LAGS) * BIN_SIZE
-    colors = {"OR": "#2a78d6", "OU": "#eb6834", "CR": "#1baf7a", "CU": "#eda100", "CER": "#e87ba4", "CEU": "#8f6bd8"}
+    # Match the condition palette used in the raster/PSTH figures: rewarded
+    # responses use the dark red/orange family; unrewarded responses use
+    # black/gray. The same semantic colors are reused for entry and exit.
+    colors = {"OR": "#b64b3f", "OU": "#333333", "CR": "#b64b3f", "CU": "#e18420", "CER": "#b64b3f", "CEU": "#8b8b8b"}
     labels = {
         "OR": "OR: Odor Rewarded",
         "OU": "OU: Odor Unrewarded",
