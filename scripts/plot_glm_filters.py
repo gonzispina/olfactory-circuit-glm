@@ -55,13 +55,21 @@ def plot_neuron52_event_filters(events) -> None:
     weights, alpha = fit_raw_coefficients(data, data.X_stimulus)
     filters = weights.reshape(len(STIMULUS_NAMES), N_STIM_LAGS)
     time = np.arange(N_STIM_LAGS) * BIN_SIZE
-    colors = {"OR": "#2a78d6", "OU": "#eb6834", "CR": "#1baf7a", "CU": "#eda100", "CER": "#7a7a76", "CEU": "#b468c9"}
+    colors = {"OR": "#2a78d6", "OU": "#eb6834", "CR": "#1baf7a", "CU": "#eda100", "CER": "#e87ba4", "CEU": "#8f6bd8"}
+    labels = {
+        "OR": "OR: Odor Rewarded",
+        "OU": "OU: Odor Unrewarded",
+        "CR": "CR: Context Entry Rewarded",
+        "CU": "CU: Context Entry Unrewarded",
+        "CER": "CER: Context Exit Rewarded",
+        "CEU": "CEU: Context Exit Unrewarded",
+    }
 
     fig, axes = plt.subplots(2, 3, figsize=(10.5, 5.7), sharex=True, sharey=True)
     for axis, name, curve in zip(axes.flat, STIMULUS_NAMES, filters):
         axis.axhline(0, color="#898781", linewidth=0.8, linestyle="--")
         axis.plot(time, curve, color=colors[name], linewidth=2, marker="o", markersize=3)
-        axis.set_title(name, fontsize=11, fontweight="semibold")
+        axis.set_title(labels[name], fontsize=10.5, fontweight="semibold")
         axis.set_xlim(0, 1.2)
         axis.set_xlabel("seconds after event")
     axes[0, 0].set_ylabel("GLM weight")
