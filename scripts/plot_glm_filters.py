@@ -53,23 +53,22 @@ def plot_neuron52_event_filters(events) -> None:
         stimulus_encoding="identity",
     )
     weights, alpha = fit_raw_coefficients(data, data.X_stimulus)
-    filters = weights.reshape(len(STIMULUS_NAMES), N_STIM_LAGS)
+    names = STIMULUS_NAMES[:4]
+    filters = weights.reshape(len(STIMULUS_NAMES), N_STIM_LAGS)[:4]
     time = np.arange(N_STIM_LAGS) * BIN_SIZE
     # Match the condition palette used in the raster/PSTH figures: rewarded
     # responses use the dark red/orange family; unrewarded responses use
     # black/gray. The same semantic colors are reused for entry and exit.
-    colors = {"OR": "#b64b3f", "OU": "#333333", "CR": "#b64b3f", "CU": "#e18420", "CER": "#b64b3f", "CEU": "#8b8b8b"}
+    colors = {"OR": "#b64b3f", "OU": "#333333", "CR": "#b64b3f", "CU": "#e18420"}
     labels = {
         "OR": "OR: Odor Rewarded",
         "OU": "OU: Odor Unrewarded",
         "CR": "CR: Context Entry Rewarded",
         "CU": "CU: Context Entry Unrewarded",
-        "CER": "CER: Context Exit Rewarded",
-        "CEU": "CEU: Context Exit Unrewarded",
     }
 
-    fig, axes = plt.subplots(2, 3, figsize=(10.5, 5.7), sharex=True, sharey=True)
-    for axis, name, curve in zip(axes.flat, STIMULUS_NAMES, filters):
+    fig, axes = plt.subplots(2, 2, figsize=(8.2, 5.7), sharex=True, sharey=True)
+    for axis, name, curve in zip(axes.flat, names, filters):
         axis.axhline(0, color="#898781", linewidth=0.8, linestyle="--")
         axis.plot(time, curve, color=colors[name], linewidth=2, marker="o", markersize=3)
         axis.set_title(labels[name], fontsize=10.5, fontweight="semibold")
@@ -78,7 +77,7 @@ def plot_neuron52_event_filters(events) -> None:
     axes[0, 0].set_ylabel("GLM weight")
     axes[1, 0].set_ylabel("GLM weight")
     fig.suptitle(f"Neuron 52: causal event filters (ridge α = {alpha:g})", fontsize=13, fontweight="semibold")
-    fig.text(0.5, 0.01, "OR/OU are aligned to odor inhalation; CR/CU and CER/CEU to context entry/exit.", ha="center", fontsize=9, color="#52514e")
+    fig.text(0.5, 0.01, "OR/OU are aligned to odor inhalation; CR/CU to context entry.", ha="center", fontsize=9, color="#52514e")
     fig.tight_layout(rect=(0, 0.04, 1, 0.93))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUTPUT / "neuron52-identity-event-filters.png", dpi=180, bbox_inches="tight")
