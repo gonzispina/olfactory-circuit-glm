@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the OR+CR neuron-45 PSTH with the baseline, pre and post windows."""
+"""Render the OR+CR neuron-45/52 PSTH aligned to first odor inhalation."""
 
 from pathlib import Path
 import sys
@@ -14,7 +14,7 @@ from src.data import load_spike_events, trial_metadata
 
 
 DATA = ROOT.parent / "neuroscience" / "MatrizFinal_8col.csv"
-OUTPUT = ROOT / "results" / "figures" / "neuron45-orcr-context-entry-psth.png"
+OUTPUT = ROOT / "results" / "figures" / "neuron45-orcr-first-odor-psth.png"
 
 
 def main() -> None:
@@ -28,7 +28,7 @@ def main() -> None:
             spikes = events[
                 (events.neuron_id == neuron) & (events.trial_number == trial.trial_number)
             ].spike_time.to_numpy()
-            relative = spikes - trial.ctx_entry_time
+            relative = spikes - trial.first_odor_inhale
             curves[neuron].append(np.histogram(relative, bins=edges)[0] / 0.05)
     mean_rates = {neuron: np.asarray(values).mean(axis=0) for neuron, values in curves.items()}
     centers = (edges[:-1] + edges[1:]) / 2
@@ -38,10 +38,10 @@ def main() -> None:
     axis.plot(centers, mean_rates[52], color="#222222", linewidth=2.2, label="Neuron 52")
     axis.axvline(0, color="#111111", linewidth=1, linestyle="--")
     axis.axvspan(-2.0, -1.5, color="#d9d8d2", alpha=.72, label="Baseline\n−2.0 to −1.5 s")
-    axis.axvspan(-.5, 0, color="#cde2fb", alpha=.68, label="Pre-context\n−0.5 to 0 s")
-    axis.axvspan(0, 1.0, color="#f8d9cb", alpha=.68, label="Post-context\n0 to +1.0 s")
-    axis.set_title("Neurons 45 and 52 · OR + CR · aligned to context entry", fontsize=13, fontweight="semibold")
-    axis.set_xlabel("seconds relative to context entry")
+    axis.axvspan(-.5, 0, color="#cde2fb", alpha=.68, label="Pre-odor\n−0.5 to 0 s")
+    axis.axvspan(0, 1.0, color="#f8d9cb", alpha=.68, label="Post-odor\n0 to +1.0 s")
+    axis.set_title("Neurons 45 and 52 · OR + CR · aligned to first odor inhalation", fontsize=13, fontweight="semibold")
+    axis.set_xlabel("seconds relative to first odor inhalation")
     axis.set_ylabel("mean firing rate (Hz)")
     axis.set_xlim(-2.5, 2.0)
     handles, labels = axis.get_legend_handles_labels()
