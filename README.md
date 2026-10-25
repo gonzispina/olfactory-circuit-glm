@@ -2,6 +2,8 @@
 
 An in-progress, reproducible analysis of trial-aligned spike trains from an olfactory/context-reward experiment. The project asks a deliberately limited question: how much do event timing, a neuron's own recent spiking, and another recorded neuron's recent spiking improve held-out predictions of spike counts?
 
+**Portfolio case study:** [Event identity and point-process GLMs](https://gonzalospina.com/projects/olfactory-glm.html)
+
 It does **not** infer synaptic connectivity or causality. A coupling term captures conditional predictive association after the modeled event and self-history terms; shared unobserved inputs can still explain an apparent effect.
 
 ## Current scope
